@@ -7,8 +7,12 @@ const svg = d3.select("body")
     .attr('width', width)
     .attr('height', height)
     .attr('id',"svg")
+    .style('margin-right',5)
+    .style('margin-left', 5)
+    .style('margin-top',5)
+    .style('margin-bottom',5)
 
-const g = svg.append('g')
+//const g = svg.append('g')
 
 d3.json('nygeo.json').then(function(data) {
     d3.csv('data.csv').then(function(pointData) {
@@ -24,45 +28,44 @@ d3.json('nygeo.json').then(function(data) {
         const geoPath = d3.geoPath()
         .projection(albersProj)
 
+        let g = svg.append("g").attr("id","g")
         g.selectAll('path')
         .data(data.features)
         .enter()
         .append('path')
             .attr('stroke', 'black')
-            .attr('fill', '#ccc')
+            .attr('fill', '#999999')
             .attr('d', geoPath)
-        g.selectAll('.circle')
+        let points = svg.append("g").attr("id","points")
+        points.selectAll('.circle')
             .data(pointData)
             .enter()
             .append('circle')
                 .attr('cx', function(d) {
-                    let scaledPoints = albersProj([parseFloat(d['longitude']) , parseFloat(d['latitude'])])
+                    let scaledPoints = albersProj([d['longitude'], d['latitude']])
                     return scaledPoints[0]
                 })
                 .attr('cy', function(d) {
-                    let scaledPoints = albersProj([parseFloat(d['longitude']) , parseFloat(d['latitude'])])
+                    let scaledPoints = albersProj([d['longitude'], d['latitude']])
                     return scaledPoints[1]
                 })
                 .attr('r', 3)
                 .attr('fill', 'steelblue')
+                .attr("stroke", "black")
                 .on( "click", function(){
-                  d3.select(this)
+                  let ani = d3.select(this)
                     .attr("opacity",1)
                     .transition()
-                    .duration(800)
-                    .attr("cx",width * Math.round(Math.random()))
-                    .attr("cy",height * Math.round(Math.random()))
-                    .attr("opacity",0)
-                    .on("end",function(){
-                      d3.select(this).remove();
-                    })
+                      .duration(800)
+                      .attr("cx",width * Math.round(Math.random()))
+                      .attr("cy",height * Math.round(Math.random()))
+                      .attr("opacity",0)
+                      .on("end",function(){
+                        d3.select(this).remove();
+                      })
                 })
 
-        svg.append('text')
-          .attr('x', 400)
-          .attr('y', 20)
-          .style('font-size', '20pt')
-          .text('Airbnb locations in New York City');
+
     })
 
 })
