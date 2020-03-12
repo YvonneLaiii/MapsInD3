@@ -1,11 +1,7 @@
-let width = 800
-let height = 600
-
-
 const svg = d3.select("body")
     .append('svg')
-    .attr('width', width)
-    .attr('height', height)
+    .attr('width', 800)
+    .attr('height', 600)
     .attr('id',"svg")
     .style('margin-right',5)
     .style('margin-left', 5)
@@ -18,7 +14,7 @@ d3.json('nygeo.json').then(function(data) {
             .scale(75000)
             .rotate([74.007, 0])
             .center([0, 40.712])
-            .translate([width/2, height/2]);
+            .translate([400, 300]);
 
         let point = pointData[0]
         let scaled = albersProj([ parseFloat(point['longitude']) , parseFloat(point['latitude']) ])
@@ -55,15 +51,13 @@ d3.json('nygeo.json').then(function(data) {
                     .attr("opacity",1)
                     .transition()
                       .duration(800)
-                      .attr("cx",width * Math.round(Math.random()))
-                      .attr("cy",height * Math.round(Math.random()))
+                      .attr("cx",800 * Math.round(Math.random()))
+                      .attr("cy",600 * Math.round(Math.random()))
                       .attr("opacity",0)
                       .on("end",function(){
                         d3.select(this).remove();
                       })
                 })
-
-
     })
 
 })
