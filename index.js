@@ -12,8 +12,6 @@ const svg = d3.select("body")
     .style('margin-top',5)
     .style('margin-bottom',5)
 
-//const g = svg.append('g')
-
 d3.json('nygeo.json').then(function(data) {
     d3.csv('data.csv').then(function(pointData) {
         const albersProj = d3.geoAlbers()
